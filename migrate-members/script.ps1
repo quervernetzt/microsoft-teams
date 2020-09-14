@@ -2,7 +2,9 @@
 $sourceTeamsGroupName = "xxx"
 $targetTeamsGroupName = "xxx"
 $deleteUsersFromSourceTeamsGroup = $true
-$backupFilePath = "C:\xxx\Teams_Users_Backup.csv"
+$backupFilePathSourceMembers = "C:\xxx\migrate-members\Teams_Source_Members_Backup.csv"
+$backupFilePathTargetMembers = "C:\xxx\migrate-members\Teams_Target_Members_Backup.csv"
+$backupFilePathTargetOwners = "C:\xxx\Teams_Target_Owners_Backup.csv"
 
 
 # Install PS Teams module
@@ -13,7 +15,7 @@ if (Get-Module -Name $moduleName -ListAvailable) {
         Update-Module $moduleName -Force
     }
 } else {
-    Write-Host "Installing module ''..."
+    Write-Host "Installing module '$moduleName'..."
     Install-Module $moduleName -Scope CurrentUser -Force
 }
 
@@ -29,17 +31,27 @@ $sourceTeamsGroupId = (Get-Team -DisplayName $sourceTeamsGroupName).GroupId
 $sourceTeamsGroupMembers = Get-TeamUser -GroupId $sourceTeamsGroupId -Role Member
 
 
-# Backup list of members to csv
-$sourceTeamsGroupMembers | Export-Csv -Path $backupFilePath -NoTypeInformation
-Write-Host "Retrieved and backuped members of Teams group '$sourceTeamsGroupName'..."
+# Backup list of source members to csv
+$sourceTeamsGroupMembers | Export-Csv -Path $backupFilePathSourceMembers -NoTypeInformation
+Write-Host "Retrieved and backuped members of source Teams group '$sourceTeamsGroupName'..."
 
 
-# Add members to target group
+# Add users of target group
 $targetTeamsGroupId = (Get-Team -DisplayName $targetTeamsGroupName).GroupId
 
 $targetTeamsGroupMembersCurrent = Get-TeamUser -GroupId $targetTeamsGroupId -Role Member
 $targetTeamsGroupOwnersCurrent = Get-TeamUser -GroupId $targetTeamsGroupId -Role Owner
 
+
+# Backup list of target members and owners to csv
+$targetTeamsGroupMembersCurrent | Export-Csv -Path $backupFilePathTargetMembers -NoTypeInformation
+Write-Host "Retrieved and backuped members of target Teams group '$targetTeamsGroupName'..."
+
+$targetTeamsGroupOwnersCurrent | Export-Csv -Path $backupFilePathTargetOwners -NoTypeInformation
+Write-Host "Retrieved and backuped owners of target Teams group '$targetTeamsGroupName'..."
+
+
+# Add members to target group
 $targetTeamsGroupMembersTarget = $sourceTeamsGroupMembers | Where-Object { ($_.UserId -notin $targetTeamsGroupMembersCurrent.UserId) -and ($_.UserId -notin $targetTeamsGroupOwnersCurrent.UserId) }
 
 $targetTeamsGroupMembersTarget | ForEach-Object {

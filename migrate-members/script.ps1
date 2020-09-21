@@ -4,7 +4,7 @@ $targetTeamsGroupName = "xxx"
 $deleteUsersFromSourceTeamsGroup = $true
 $backupFilePathSourceMembers = "C:\xxx\migrate-members\Teams_Source_Members_Backup.csv"
 $backupFilePathTargetMembers = "C:\xxx\migrate-members\Teams_Target_Members_Backup.csv"
-$backupFilePathTargetOwners = "C:\xxx\Teams_Target_Owners_Backup.csv"
+$backupFilePathTargetOwners = "C:\xxx\migrate-members\Teams_Target_Owners_Backup.csv"
 
 
 # Install PS Teams module

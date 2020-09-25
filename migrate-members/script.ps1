@@ -36,7 +36,7 @@ $sourceTeamsGroupMembers | Export-Csv -Path $backupFilePathSourceMembers -NoType
 Write-Host "Retrieved and backuped members of source Teams group '$sourceTeamsGroupName'..."
 
 
-# Add users of target group
+# Get users of target group
 $targetTeamsGroupId = (Get-Team -DisplayName $targetTeamsGroupName).GroupId
 
 $targetTeamsGroupMembersCurrent = Get-TeamUser -GroupId $targetTeamsGroupId -Role Member

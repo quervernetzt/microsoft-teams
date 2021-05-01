@@ -23,15 +23,7 @@ param (
     #     Position = 3)
     # ]
     # [string]
-    # $TeamsGroupPrivateChannelName,
-
-    # [Parameter(
-    #     Mandatory = $false,
-    #     HelpMessage = "Please enter the tags as comma separated string (e.g. tag1,tag2) that shall be assigned to the members",
-    #     Position = 4)
-    # ]
-    # [string]
-    # $TagsToAssign = ""
+    # $TeamsGroupPrivateChannelName
 )
 
 # Install PS Teams module
@@ -65,9 +57,6 @@ foreach ($member in $members) {
 
 
 # Add members to Private Channel (if not already in the channel)
-
-
-# Assign the tags
 
 
 Write-Host "Done..."

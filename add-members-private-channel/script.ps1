@@ -1,26 +1,25 @@
+########################
 # Parameters
+########################
 [CmdletBinding()]
 param (
     [Parameter(
         Mandatory = $false,
-        HelpMessage = "Please enter the path to the CSV with members email addresses to add",
-        Position = 1)
+        HelpMessage = "Please enter the path to the CSV with members email addresses to add")
     ]
     [string]
     $MembersToImportCSVPath = "$PSScriptRoot\members.csv",
 
     [Parameter(
         Mandatory = $true,
-        HelpMessage = "Please enter the name of the Teams group",
-        Position = 2)
+        HelpMessage = "Please enter the name of the Teams group")
     ]
     [string]
     $TeamsGroupName,
 
     [Parameter(
         Mandatory = $true,
-        HelpMessage = "Please enter the name of the Private Channel to add the members to",
-        Position = 3)
+        HelpMessage = "Please enter the name of the Private Channel to add the members to")
     ]
     [string]
     $TeamsGroupPrivateChannelName
@@ -80,8 +79,8 @@ $teamsGroupMembersTarget | ForEach-Object {
 
 Write-Host "Finished adding users, validating..."
 
-
+########################
 # Add members to Private Channel (if not already in the channel)
-
+########################
 
 Write-Host "Done..."

@@ -3,48 +3,42 @@
 param (
     [Parameter(
         Mandatory = $true,
-        HelpMessage = "Please enter the name of the teams group to export from",
-        Position = 1)
+        HelpMessage = "Please enter the name of the teams group to export from")
     ]
     [string]
     $SourceTeamsGroupName,
 
     [Parameter(
         Mandatory = $true,
-        HelpMessage = "Please enter the name of the teams group to export to",
-        Position = 2)
+        HelpMessage = "Please enter the name of the teams group to export to")
     ]
     [string]
     $TargetTeamsGroupName,
 
     [Parameter(
         Mandatory = $true,
-        HelpMessage = "Please enter boolean to indicate whether to delete the exported users from the source teams group",
-        Position = 3)
+        HelpMessage = "Please enter boolean to indicate whether to delete the exported users from the source teams group")
     ]
     [bool]
     $DeleteUsersFromSourceTeamsGroup,
 
     [Parameter(
         Mandatory = $true,
-        HelpMessage = "Please enter the path where to save the csv with the members from the source Teams group to export",
-        Position = 4)
+        HelpMessage = "Please enter the path where to save the csv with the members from the source Teams group to export")
     ]
     [string]
     $BackupFilePathSourceMembers,
 
     [Parameter(
         Mandatory = $true,
-        HelpMessage = "Please enter the path where to save the csv with the members of the target Teams group",
-        Position = 5)
+        HelpMessage = "Please enter the path where to save the csv with the members of the target Teams group")
     ]
     [string]
     $BackupFilePathTargetMembers,
 
     [Parameter(
         Mandatory = $true,
-        HelpMessage = "Please enter the path where to save the csv with the owners of the target Teams group",
-        Position = 6)
+        HelpMessage = "Please enter the path where to save the csv with the owners of the target Teams group")
     ]
     [string]
     $BackupFilePathTargetOwners

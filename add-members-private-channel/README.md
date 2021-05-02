@@ -1,6 +1,7 @@
 # General
 
 - Goal is to import members to a Private Channel
+- Does not include special handling for owners
 
 
 # How to use it

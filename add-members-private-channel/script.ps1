@@ -28,19 +28,28 @@ param (
 ########################
 # Check teams module
 ########################
-$moduleName = "MicrosoftTeams"
+[string]$moduleName = "MicrosoftTeams"
+[string]$validatedVersion = "2.2.0"
+
 if (Get-Module -Name $moduleName -ListAvailable) {
-    [string]$toUpdate = Read-Host "Module '$moduleName' is available, do you want to update it? (yes/no)"
-    if ($toUpdate.Trim().ToLower() -eq "yes") {
-        Update-Module $moduleName -Force
+    Write-Host "Microsoft Teams module available..."
+    [psmoduleinfo]$module = Get-Module -Name $moduleName -ListAvailable
+    [version]$moduleVersion = $module.Version
+
+    if ($moduleVersion -eq $validatedVersion) {
+        Write-Host "Validated version installed..."
+    }
+    else {
+        throw "Please check the version installed to support the required commands..."
     }
 }
 else {
-    Write-Host "Installing module '$moduleName'..."
-    Install-Module $moduleName -Scope CurrentUser -Force
+    Write-Host "Installing Microsoft Teams module..."
+    Install-Module PowerShellGet -Force -AllowClobber
+    Install-Module -Name MicrosoftTeams -AllowPrerelease -RequiredVersion 2.2.0-preview
 }
 
-Write-Host "Checked module '$moduleName'..."
+Write-Host "Checked module '$moduleName' with version '$validatedVersion'..."
 
 ########################
 # Login
@@ -69,18 +78,52 @@ foreach ($memberToAdd in $membersToAdd) {
 # Add members to Teams Group (if not already in Teams Group)
 ########################
 [object[]]$teamsGroupMembersTarget = $membersToAdd | Where-Object { ($_.Email -notin $teamsGroupMembersCurrent.User) -and ($_.Email -notin $teamsGroupOwnersCurrent.User) }
+[int]$numberOfMembersToAddToTeamsGroup = ($teamsGroupMembersTarget | Measure-Object).Count
 
-$teamsGroupMembersTarget | ForEach-Object {
-    [string]$emailAddress = $_.Email
-
-    Add-TeamUser -GroupId $teamsGroupId -User $emailAddress -Role Member
-    Write-Host "Added user '$emailAddress' with role 'Member' to group '$TeamsGroupName'..."
+if ($numberOfMembersToAddToTeamsGroup -gt 0) {
+    $teamsGroupMembersTarget | ForEach-Object {
+        [string]$emailAddress = $_.Email
+    
+        Add-TeamUser -GroupId $teamsGroupId -User $emailAddress -Role Member
+        Write-Host "Added user '$emailAddress' with role 'Member' to group '$TeamsGroupName'..."
+    }
+    
+    Write-Host "Added users to Teams Group..."
+}
+else {
+    Write-Host "No users to add to Teams Group..."
 }
 
-Write-Host "Finished adding users, validating..."
+
+########################
+# Get current users of Private Channel
+########################
+[object]$privateChannelMembersCurrent = Get-TeamChannelUser -GroupId $teamsGroupId -DisplayName $TeamsGroupPrivateChannelName -Role Member
+[object]$privateChannelOwnersCurrent = Get-TeamChannelUser -GroupId $teamsGroupId -DisplayName $TeamsGroupPrivateChannelName -Role Owner
 
 ########################
 # Add members to Private Channel (if not already in the channel)
 ########################
+[object[]]$privateChannelMembersTarget = $membersToAdd | Where-Object { ($_.Email -notin $privateChannelMembersCurrent.User) -and ($_.Email -notin $privateChannelOwnersCurrent.User) }
+[int]$numberOfMembersToAddToPrivateChannel = ($privateChannelMembersTarget | Measure-Object).Count
+
+if ($numberOfMembersToAddToPrivateChannel -gt 0) {
+    $privateChannelMembersTarget | ForEach-Object {
+        [string]$emailAddress = $_.Email
+    
+        Add-TeamChannelUser -GroupId $teamsGroupId -DisplayName $TeamsGroupPrivateChannelName -User $emailAddress
+        Write-Host "Added user '$emailAddress' with role 'Member' to Private Channel '$TeamsGroupPrivateChannelName'..."
+    }
+    
+    Write-Host "Added users to Private Channel..."
+}
+else {
+    Write-Host "No users to add to Private Channel..."
+}
+
+# ########################
+# Validation
+# ########################
+
 
 Write-Host "Done..."

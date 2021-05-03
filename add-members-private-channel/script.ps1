@@ -94,7 +94,6 @@ else {
     Write-Host "No users to add to Teams Group..."
 }
 
-
 ########################
 # Get current users of Private Channel
 ########################
@@ -120,10 +119,6 @@ if ($numberOfMembersToAddToPrivateChannel -gt 0) {
 else {
     Write-Host "No users to add to Private Channel..."
 }
-
-# ########################
-# Validation
-# ########################
 
 
 Write-Host "Done..."

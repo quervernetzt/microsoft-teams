@@ -10,9 +10,10 @@
 
 # How to use it
 
-- Execute the script providing the required parameters
+- Add email addresses to `.\members.csv`
 
-- Example
+- Execute the script providing the required parameters
+    - `.\script.ps1 -TeamsGroupName <name> -TeamsGroupPrivateChannelName <name>`
 
 
 # Resources
